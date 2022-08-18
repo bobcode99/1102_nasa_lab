@@ -1,7 +1,9 @@
 const express = require("express");
 // const { MongoClient } = require("mongodb");
 const mongoose = require("mongoose");
+const cors = require("cors");
 const Keys = require("./Keys");
+const Users = require("./Users");
 
 // mongoDB
 mongoose.connect("mongodb://localhost/lab10db",
@@ -17,7 +19,7 @@ const app = express();
 bodyParser = require('body-parser');
 // // support parsing of application/json type post data
 app.use(bodyParser.json());
-
+app.use(cors());
 //support parsing of application/x-www-form-urlencoded post data
 app.use(bodyParser.urlencoded({ extended: true }));
 
@@ -30,6 +32,41 @@ const port = 3000;
 
 // crud
 // create, read, update, delete
+
+app.post("/user", async (req, res) => {
+    // if create succesfully, return 201
+    // if key exist, return 400
+    console.log("post user req.body:", req.body);
+    try {
+        const key = await Users.create({ key: req.body.key, gender: req.body.gender, name: req.body.name, age: req.body.age })
+        // res.status(201).send("Success post key")
+        res.sendStatus(201);
+    } catch(e){
+        // res.status(400).send("Fail on post key")
+        res.sendStatus(400);
+
+        console.log("user existt")
+    }
+})
+
+app.get("/user", async (req, res) => {
+    // get all user
+
+    // if success return 200
+    
+    console.log("get user!!");
+    try {
+        const userArr = await Users.find({});
+        console.log("user: ", userArr)
+        const objArr = {
+            results: userArr
+        }
+        res.status(200).send(userArr)
+    } catch(e){
+        res.status(400).send("Fail on get user")
+        console.log("Fail on get user e:", e)
+    }
+})
 
 app.post("/key", async (req, res) => {
     // if create succesfully, return 201
