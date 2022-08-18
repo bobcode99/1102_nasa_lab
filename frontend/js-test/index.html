@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<h2>My First Web Page</h2>
+<p>My First Paragraph.</p>
+
+<p id="demo"></p>
+
+<script>
+    let age = 33
+
+    async function getFetch(){
+        const response = await fetch('http://localhost:3000/user')
+                                .then((response) => response.json())
+                                .then((data) => {
+                                    console.log(data)
+                                });
+
+        console.log(response)
+    }
+
+    document.getElementById("demo").innerHTML =age;
+    getFetch()
+
+</script>
+
+</body>
+</html> 
